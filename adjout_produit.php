@@ -1,6 +1,7 @@
 <?php 
 //Ajout de la base de donnees
 include("db.php");
+//Recuperation des champs
 $nom=$_POST['nom'];
 $prix=$_POST['prix'];
 $stock=$_POST['stock'];
