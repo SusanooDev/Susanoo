@@ -1,4 +1,5 @@
 <?php 
+//Ajout de la base de donnees
 include("db.php");
 $nom=$_POST['nom'];
 $prix=$_POST['prix'];
@@ -8,3 +9,4 @@ $sql_adjout="insert into produits values(null, '$nom', '$prix', '$stock', '$desc
 $query=mysqli_query($connect, $sql_adjout);
 header("location:liste_produit.php");
 ?>
+
