@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  susano-php-application:
+    container_name: app_susano 
+    build:
+      context: ./app-php/
+      dockerfile: Dockerfile
+    depends_on:
+      - susano-mysql
+    volumes:
+      - ./app-php/app:/var/www/html/
+    ports:
+      - 8090:80
+
+
+  susano-mysql:
+    container_name: db_susano
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: susano
+      MYSQL_DATABASE: gestiondeproduits
+      MYSQL_USER: susanouser
+      MYSQL_PASSWORD: passer
+    ports:
+      - "9906:3306"
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - susano-mysql
+    ports:
+      - 9595:80
+    environment:
+      - PMA_HOSTS=db_susano
