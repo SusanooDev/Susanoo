@@ -3,21 +3,35 @@ pipeline
     agent any
     stages
     {
+        stage('Getting code from the github repo')
+        {
+            steps
+            {
+                git branch: 'delivery',
+                credentialsId: 'c427e054-e135-4acb-9ce1-0d3353f37afb',
+                url: 'https://github.com/SusanooDev/Susanoo.git'
+            }
+        }
+        
         stage('Build php-application Image')
         {
             steps
             {
                 echo 'Building the php-app image ....'
-                sh "docker build -t -f ./app-php/Dockerfile app-gestionproduits:1.0.${BUILD_NUMBER} ."
+                dir("app-php"){
+                    sh "docker build -t app-gestionproduits:1.0.${BUILD_NUMBER} ."
+                }
             }
         }
-
+        
         stage('Build mySql-db Image')
         {
             steps
             {
                 echo 'Building the mySQL DB image ....'
-                sh "docker build -t -f ./mysql/Dockerfile app-gestionproduits:1.0.${BUILD_NUMBER} ."
+                dir("mysql"){
+                    sh "docker build -t bd-gestionproduits:1.0.${BUILD_NUMBER} ."
+                }
             }
         }
 
@@ -37,9 +51,12 @@ pipeline
                 echo 'Connecting to docker-hub ....'
                 sh "docker login -u susanoodev -p dckr_pat_KRBr0oK0k04m4aso5yxPszicyXk"
                 echo 'Pushing the app-php image in the docker-hub ....'
-                sh "docker push app-gestionproduits:1.0.${BUILD_NUMBER}"
+                sh "docker tag app-gestionproduits:1.0.${BUILD_NUMBER} susanoodev/app-gestionproduits:1.0.${BUILD_NUMBER}"
+                sh "docker push susanoodev/app-gestionproduits:1.0.${BUILD_NUMBER}"
                 echo 'Pushing the mySQL DB image in the docker-hub ....'
-                sh "docker push app-gestionproduits:1.0.${BUILD_NUMBER}"
+                sh "docker login -u susanoodev -p dckr_pat_KRBr0oK0k04m4aso5yxPszicyXk"
+                sh "docker tag bd-gestionproduits:1.0.${BUILD_NUMBER} susanoodev/bd-gestionproduits:1.0.${BUILD_NUMBER}"
+                sh "docker push susanoodev/bd-gestionproduits:1.0.${BUILD_NUMBER}"
             }
         }        
         
@@ -88,10 +105,6 @@ pipeline
         success 
         {
             slackSend message:"une nouvelle version de app-gestionproduits builder avec succes - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-        }
-        failure 
-        {
-            slackSend failOnError:true message:"ECHEC du Build - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
         }
     }
 }
