@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-susano-deployment
+  namespace: susano-gestion-projet
+  labels:
+    app: app-gesprod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-gesprod
+  template:
+    metadata:
+      labels:
+        app: app-gesprod
+      namespace: susano-gestion-projet
+    spec:
+      containers:
+      - name: my-php-app
+        image: kalidousy/my-php-app:1.0.1 ---> mon image.
+        env:
+        - name: DATABASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mydbsecret
+              key: USERNAME
+        - name: DATABASE_HOSTNAME
+          valueFrom:
+            secretKeyRef:
+              name: mydbsecret
+              key: HOSTNAME
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mydbsecret
+              key: PASSWORD

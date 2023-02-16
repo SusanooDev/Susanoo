@@ -1,0 +1,16 @@
+pipeline
+{
+    agent any
+    stages
+    {
+        stage('Getting code from the github repo')
+        {
+            steps
+            {
+                git branch: 'delivery',
+                credentialsId: 'c427e054-e135-4acb-9ce1-0d3353f37afb',
+                url: 'https://github.com/SusanooDev/Susanoo.git'
+            }
+        }
+    }
+}
