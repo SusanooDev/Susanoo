@@ -17,8 +17,8 @@ pipeline
         {
             steps
             {
-                slackSend message:"lancement du déploiment de app-gestionproduits avec k8s ..."
-                
+                slackSend (channel: 'devops' ,message: 'lancement du déploiment de app-gestionproduits avec k8s ...')
+
                 dir(k8s-manifests){
                     sh "kubectl create -f gesprod-namespace.yaml"
                     sh "kubectl create -f gesprod-deploy.yaml"
