@@ -17,7 +17,7 @@ pipeline
         {
             steps
             {
-                slackSend message:"Debut du deploiement avec k8s - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                //slackSend message:"Debut du deploiement avec k8s - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
                 dir(k8s-manifests){
                     sh "kubectl create -f gesprod-namespace.yaml"
                     sh "kubectl create -f gesprod-deploy.yaml"
