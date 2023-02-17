@@ -35,7 +35,8 @@ pipeline
             steps
             {
                 slackSend (channel: 'devops' ,message: 'Test de app-gestionproduits ...')
-                    sh "curl $(minikube service -n susano-gestion-projet app-gesprod --url)"
+                    sh "minikube service -n susano-gestion-projet app-gesprod --url >> link.txt"
+                    sh "curl $(cat link.txt)"
 
                 post 
                 {
