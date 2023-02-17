@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
   - name: mysqlpod
-    image: mysql:8.0.32 --> mon image
+    image: susanoodev/bd-gestionproduits:1.0.16
     env:
       - name: MYSQL_ROOT_PASSWORD
         valueFrom:

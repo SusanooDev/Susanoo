@@ -4,7 +4,7 @@ metadata:
   labels:
     name: pma-svc
   name: pmaservice
-  namespace: devops-k8s-example
+  namespace: susano-gestion-projet
 spec:
   type: NodePort
   ports:

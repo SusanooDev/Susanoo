@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: my-php-app
-        image: kalidousy/my-php-app:1.0.1 ---> mon image.
+        image: susanoodev/app-gestionproduits:1.0.2
         env:
         - name: DATABASE_USERNAME
           valueFrom:
