@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
   - name: pmapod
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin:5.2.0
     env:
       - name: PMA_HOST
         valueFrom:

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-susano-deployment
+  name: app-susano
   namespace: susano-gestion-projet
   labels:
     app: app-gesprod
@@ -17,7 +17,7 @@ spec:
       namespace: susano-gestion-projet
     spec:
       containers:
-      - name: my-php-app
+      - name: app-susano
         image: susanoodev/app-gestionproduits:1.0.2
         env:
         - name: DATABASE_USERNAME

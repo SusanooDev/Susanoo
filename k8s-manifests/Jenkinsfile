@@ -19,13 +19,52 @@ pipeline
             {
                 slackSend (channel: 'devops' ,message: 'lancement du déploiment de app-gestionproduits avec k8s ...')
                 dir("k8s-manifests"){
-                    #sh "kubectl create -f gesprod-namespace.yaml"
                     sh "kubectl create -f gesprod-deploy.yaml"
                     sh "kubectl create -f gesprod-service.yaml"
                     sh "kubectl create -f mysql-pod.yaml"
                     sh "kubectl create -f mysql-service.yaml"
                     sh "kubectl create -f phpmyadmin-pod.yaml"
                     sh "kubectl create -f phpmyadmin-service.yaml"
+                }
+                slackSend (channel: 'devops' ,message: 'Fin du déploiment de app-gestionproduits avec k8s ...')
+            }
+        }
+
+        stage('Testint app')
+        {
+            steps
+            {
+                slackSend (channel: 'devops' ,message: 'Test de app-gestionproduits ...')
+                    sh "curl $(minikube service -n susano-gestion-projet app-gesprod --url)"
+
+                post 
+                {
+                    success 
+                    {
+                        slackSend message:"Test de app-gestionprouduits réussi - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                    }
+                }
+            }
+        }
+
+        stage('Cleanning Environnemnt ')
+        {
+            steps
+            {
+                slackSend (channel: 'devops' ,message: 'Demmarage du nettoiement de notre environnement...')
+                    sh "kubectl delete pod app-gesprod"
+                    sh "kubectl delete pod mysqlpod"
+                    sh "kubectl delete pod pmapod"
+                    sh "kubectl delete service app-gesprod"
+                    sh "kubectl delete service mysqlservice"
+                    sh "kubectl delete service pmaservice"
+
+                post 
+                {
+                    success 
+                    {
+                        slackSend message:"Nettoyer avec succès ... - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                    }
                 }
             }
         }
